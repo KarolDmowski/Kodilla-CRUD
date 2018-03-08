@@ -19,6 +19,7 @@ public class TaskController {
     @Autowired
     private TaskMapper taskMapper;
 
+
     @RequestMapping(method = RequestMethod.GET, value = "getTasks")
     public List<TaskDto> getTasks(){
         return taskMapper.mapToTaskDtoList(service.getAllTasks());
@@ -30,7 +31,10 @@ public class TaskController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "deleteTask")
-    public void deleteTask (String taskId){
+    public void deleteTask (@RequestParam Long taskId) throws TaskNotFoundException{
+        if (service.getTaskById(taskId).isPresent()){
+            service.deleteTask(taskId);
+        }
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "updateTask")
